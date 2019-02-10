@@ -1,4 +1,4 @@
-import twitter, json, dropbox, requests, time, os, random, math
+import twitter,dropbox, requests, time, random, math
 
 consumerKey = 'CONSUMERKEY'
 consumerSecret = 'CONSUMERSECRET'
@@ -8,10 +8,13 @@ api = twitter.Api(consumer_key = consumerKey, consumer_secret = consumerSecret, 
 client = dropbox.Dropbox('DROPBOXKEY')
 
 def postMoe():
+	postnubmer = 0
 	moeFolder = client.files_list_folder('').entries
 	randomIndex = math.floor(random.random() * len(moeFolder))
 	randomImage = client.sharing_create_shared_link('/' + moeFolder[randomIndex].name).url[:-1] + '1'
 	api.PostUpdate('', randomImage)
+	postnumber += 1
+	print("Post {0} successfull!".format(postnumber))
 
 while True:
     postMoe()
