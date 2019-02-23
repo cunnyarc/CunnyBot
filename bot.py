@@ -1,21 +1,25 @@
-import twitter, dropbox, requests, time, random, math
+import twitter, json, requests, time, os
 
-consumerKey = 'CONSUMERKEY'
-consumerSecret = 'CONSUMERSECRET'
-accessTokenKey = 'ACESSTOKENKEY'
-accessTokenSecret = 'ACESSTOKENSECRET'
-api = twitter.Api(consumer_key = consumerKey, consumer_secret = consumerSecret, access_token_key = accessTokenKey, access_token_secret = accessTokenSecret)
-client = dropbox.Dropbox('DROPBOXKEY')
+consumer_key = "CONSUMERKEY"
+consumer_secret = "SONSUMERSECRET"
+access_token_key = "ACCESSTOKENKEY"
+access_token_secret = "ACCESSTOKENSECRET"
+
+api = twitter.Api(consumer_key,consumer_secret,access_token_key,access_token_secret)
+lastImageUrl = ""
 
 def postMoe():
-	postnubmer = 0
-	moeFolder = client.files_list_folder('').entries
-	randomIndex = math.floor(random.random() * len(moeFolder))
-	randomImage = client.sharing_create_shared_link('/' + moeFolder[randomIndex].name).url[:-1] + '1'
-	api.PostUpdate('', randomImage)
-	postnumber += 1
-	print("Post {0} successfull!".format(postnumber))
+	global lastImageUrl
+	if lastImageUrl == "":
+		print("I'm Running")
+	with requests.get('https://www.reddit.com/r/awwnime/new.json', headers={'user-agent': 'OreganoMoeBot'}) as url:
+		moeData = json.loads(url.content)['data']['children'][0]['data']
+		moeImage = moeData['url']
+		moeLink = "https://www.reddit.com" + moeData['permalink']
+		if (moeImage != lastImageUrl):
+			api.PostUpdate("#moe | " + moeLink, moeImage)
+			lastImageUrl = moeImage
+			time.sleep(3600)
+			postMoe()
 
-while True:
-    postMoe()
-    time.sleep(3600) #waits 1 hour
+postMoe()
