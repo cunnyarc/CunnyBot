@@ -19,7 +19,7 @@ def postMoe():
 		if (moeImage != lastImageUrl):
 			api.PostUpdate("#moe | " + moeLink, moeImage)
 			lastImageUrl = moeImage
-			time.sleep(3600)
-			postMoe()
 
-postMoe()
+while True:
+	postMoe()
+	time.sleep(3600)
