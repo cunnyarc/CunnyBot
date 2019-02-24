@@ -2,4 +2,4 @@
 A twitter bot that posts a moe picture every hour
 
 # Things I Have Used
-This bot uses the [Dropbox Api](https://github.com/dropbox/dropbox-sdk-python) and the [Twitter Api](https://github.com/bear/python-twitter) to fully function.
+This bot uses the [Twitter Api](https://github.com/bear/python-twitter) and this [Reddit Thread](https://www.reddit.com/r/awwnime/) to  make this bot fully function.
