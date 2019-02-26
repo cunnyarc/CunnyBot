@@ -21,5 +21,12 @@ def postMoe():
 			lastImageUrl = moeImage
 
 while True:
-	postMoe()
-	time.sleep(3600)
+	try:
+		postMoe()
+		time.sleep(3600)
+	except AttributeError as error:
+		print("an error occured trying again")
+		lastImageUrl = ""
+		time.sleep(3)
+	else:
+		break
