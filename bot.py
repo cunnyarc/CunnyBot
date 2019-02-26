@@ -27,6 +27,6 @@ while True:
 	except AttributeError as error:
 		print("an error occured trying again")
 		lastImageUrl = ""
-		time.sleep(3)
+		continue
 	else:
 		break
