@@ -1,0 +1,11 @@
+{
+  "tConsumerKey": "CONSUMERKEY",
+  "tConsumerSecret": "CONSUMERSECRET",
+  "tAccessTokenKey": "ACESSTOKENKEY",
+  "tAccessTokenSecret": "ACCESSTOKENSECRET",
+  "rClientId": "CLIENTID",
+  "rClientSecret": "CLIENTSECRET",
+  "rUserAgent": "MoeBot",
+  "iClientId": "CLIENTID",
+  "iClientSecret": "CLIENTSECRET"
+}
