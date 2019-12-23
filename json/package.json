@@ -1,9 +1,0 @@
-{
-  "name": "moebot",
-  "version": "0.1",
-  "author": "Glitchy_Red",
-  "dependancies": {
-      "pyton-twitter": "v3.5",
-      "praw": "v6.1.1"
-  }
-}
