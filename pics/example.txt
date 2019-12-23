@@ -1,0 +1,1 @@
+//This stores all of the pictures moe bot downloads
