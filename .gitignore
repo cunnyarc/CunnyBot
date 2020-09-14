@@ -1,0 +1,8 @@
+# No one needs to see unimportant things
+__pycache__/
+.venv/
+.idea
+
+
+# (。・ω・。) You not allowed to see this
+secrets.json

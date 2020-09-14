@@ -1,0 +1,2 @@
+[2020-09-14 20:22:41.003994] [[WinError 2] The system cannot find the file specified: 'example.txt'] 
+END OF ERROR 
