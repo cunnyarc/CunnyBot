@@ -1,11 +1,12 @@
-import praw
-import tweepy
-import time
-import json
-import random
 import datetime
+import json
 import os
+import random
+import time
+
+import praw
 import requests
+import tweepy
 
 # Getting them tokens
 with open("secrets.json", "r") as f:
@@ -25,7 +26,7 @@ twitter = tweepy.API(auth)
 
 
 def get_post():
-    """Yoinks a random submission from r/awwnime to post on twitter"""
+    """Yoinks a random submission from r/Moescape to post on twitter"""
     print("Getting post from reddit")
 
     try:
@@ -51,11 +52,12 @@ def get_post():
 
     except Exception as error:
         print(f"[EROR] MoeBot has run into an error: [{error}]")
-        log = open('logs.txt', 'w')
-        log.write(f'[{datetime.datetime.utcnow()}] [{error}] \n'
+        log = open('logs.txt', 'a')
+        log.write(f'[{datetime.datetime.utcnow()}] [{type(error)}] \n'
                   f'END OF ERROR \n')
         log.close()
         time.sleep(7200)
+
 
 def get_image(url):
     file_name = os.path.basename(url[-18:])
@@ -71,8 +73,8 @@ def get_image(url):
 
     except Exception as error:
         print(f"[EROR] MoeBot has run into an error: [{error}]")
-        log = open('logs.txt', 'w')
-        log.write(f"[{datetime.datetime.utcnow()}] [{error}] \n"
+        log = open('logs.txt', 'a')
+        log.write(f"[{datetime.datetime.utcnow()}] [{type(error)}] \n"
                   f"END OF ERROR \n")
         log.close()
         time.sleep(7200)
@@ -87,12 +89,23 @@ def tweet(post_name, post_comments, post_likes, post_link, post_image):
         twitter.update_with_media(post_image, f"{post_name} \n"
                                               f"💬 {post_comments} | ❤ {post_likes} \n \n"
                                               f"🔗 {post_link}")
-        for file in os.listdir("./pics"):
-            os.remove(file)
     except Exception as error:
         print(f"[EROR] MoeBot has run into an error: [{error}]")
-        log = open('logs.txt', 'w')
-        log.write(f"[{datetime.datetime.utcnow()}] [{error}] \n"
+        log = open('logs.txt', 'a')
+        log.write(f"[{datetime.datetime.utcnow()}] [{type(error)}] \n"
+                  f"END OF ERROR \n")
+        log.close()
+
+    time.sleep(6)
+    print(f"MoeBot is removing file {post_image}")
+    try:
+        os.remove(post_image)
+        print(f"MoeBot removed file {post_image}")
+
+    except FileNotFoundError:
+        print(f"MoeBot ran into an error removing {post_image}")
+        log = open('logs.txt', 'a')
+        log.write(f"[{datetime.datetime.utcnow()}] [File Not Found] \n"
                   f"END OF ERROR \n")
         log.close()
 
