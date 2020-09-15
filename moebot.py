@@ -7,6 +7,8 @@ import time
 import praw
 import requests
 import tweepy
+from discord import Embed
+from discord import Webhook, RequestsWebhookAdapter
 
 # Getting them tokens
 with open("secrets.json", "r") as f:
@@ -40,11 +42,12 @@ def get_post():
             post_likes = random_post.score
             post_link = random_post.shortlink
             post_image = get_image(random_post.url)
+            post_discord_image = random_post.url
 
             cache['post-ids'].append(f'{random_post.id}')
             with open('cache.json', 'w+') as c:
                 json.dump(cache, c, indent=4)
-            tweet(post_name, post_comments, post_likes, post_link, post_image)
+            tweet(post_name, post_comments, post_likes, post_link, post_image, post_discord_image)
 
         else:
             print(f"already posted image {random_post.url}")
@@ -80,15 +83,26 @@ def get_image(url):
         time.sleep(7200)
 
 
-def tweet(post_name, post_comments, post_likes, post_link, post_image):
+def tweet(post_name, post_comments, post_likes, post_link, post_image, post_discord_image):
     """Simply tweets out the submission"""
-    print(f"Tweeting out post: {post_link} \n"
+    print(f"MoeBot tweeting out post: {post_link} \n"
           f"with image {post_image}")
 
     try:
         twitter.update_with_media(post_image, f"{post_name} \n"
                                               f"💬 {post_comments} | ❤ {post_likes} \n \n"
                                               f"🔗 {post_link}")
+
+        print("MoeBot posting to discord")
+        webhook = Webhook.partial(config["Moe-Discord-ID"],
+                                  config["Moe-Discord-Token"],
+                                  adapter=RequestsWebhookAdapter())
+        emb = Embed(color=0xbc25cf, description=f"**[{post_name}]({post_link})**")
+        emb.set_image(url=post_discord_image)
+        emb.set_footer(text=f"💬{post_comments} | ❤ {post_likes}")
+
+        webhook.send(embed=emb)
+
     except Exception as error:
         print(f"[EROR] MoeBot has run into an error: [{error}]")
         log = open('logs.txt', 'a')
