@@ -1,6 +1,5 @@
 # No one needs to see unimportant things
 __pycache__/
-.venv/
 .idea
 
 
