@@ -34,7 +34,7 @@ while not(time.sleep(7200)):
 
         try:
             posts = [post for post in reddit.subreddit('Moescape').hot(limit=20)]
-            random_post_number = random.randint(0, 20)
+            random_post_number = random.randint(0, 19)
             random_post = posts[random_post_number]
 
             if random_post.id not in cache['post-ids']:
