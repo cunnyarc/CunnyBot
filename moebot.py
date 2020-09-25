@@ -28,7 +28,7 @@ while not(time.sleep(7200)):
     twitter = tweepy.API(auth)
 
 
-    def get_post():
+    def get_post(fails=0):
         """Yoinks a random submission from r/Moescape to post on twitter"""
         print("Getting post from reddit")
 
@@ -37,7 +37,15 @@ while not(time.sleep(7200)):
             random_post_number = random.randint(0, 19)
             random_post = posts[random_post_number]
 
-            if random_post.id not in cache['post-ids']:
+            if fails >= 3:
+                print("MoeBot has failed to get a post too many times, going to sleep!")
+                return
+            elif random_post.id in cache['post-ids']:
+                fails = fails + 1
+                print(f"already posted image {random_post.url}")
+                get_post(fails)
+
+            else:
                 post_name = random_post.title
                 post_comments = random_post.num_comments
                 post_likes = random_post.score
@@ -50,17 +58,13 @@ while not(time.sleep(7200)):
                     json.dump(cache, c, indent=4)
                 tweet(post_name, post_comments, post_likes, post_link, post_image, post_discord_image)
 
-            else:
-                print(f"already posted image {random_post.url}")
-                get_post()
-
         except Exception as error:
             print(f"[EROR] MoeBot has run into an error: [{error}]")
             log = open('logs.txt', 'a')
             log.write(f'[{datetime.datetime.utcnow()}] [{type(error)}] \n'
                       f'END OF ERROR \n')
             log.close()
-            time.sleep(7200)
+            return
 
 
     def get_image(url):
@@ -81,7 +85,7 @@ while not(time.sleep(7200)):
             log.write(f"[{datetime.datetime.utcnow()}] [{type(error)}] \n"
                       f"END OF ERROR \n")
             log.close()
-            time.sleep(7200)
+            return
 
 
     def tweet(post_name, post_comments, post_likes, post_link, post_image, post_discord_image):

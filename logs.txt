@@ -8,3 +8,5 @@ END OF ERROR
 END OF ERROR 
 [2020-09-15 16:23:17.666339] [<class 'FileNotFoundError'>] 
 END OF ERROR 
+[2020-09-25 19:27:20.558363] [<class 'IndexError'>] 
+END OF ERROR 
