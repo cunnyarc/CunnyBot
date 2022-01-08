@@ -1,40 +1,12 @@
 import random
-import praw
+import os
 
+import praw
 from praw.exceptions import RedditAPIException
 from colorama import Fore, Style
 
-SOURCES = [
-    "awwnime",
-    "moescape",
-    "onodera",
-    "tsunderes",
-    "hatsune",
-    "TwoDeeArt",
-    "Honkers",
-    "thecutestidol",
-    "LoveArrowShoot",
-    "LegendaryMinalinsky",
-    "TheRiceGoddess",
-    "Harasho",
-    "washiwashi",
-    "onetrueidol",
-    "MioFanClub",
-    "TainakaRitsu",
-    "azunyan",
-    "onetruebiribiri",
-    "saber",
-    "headpats",
-    "homura",
-    "Sayaka",
-    "animelegwear",
-    "tyingherhairup",
-    "cutelittlefangs",
-    "Patchuu",
-    "Megumin",
-    "pouts",
-    "megane"
-]
+with open(os.path.join("./sources.txt"), 'r') as sources_list:
+    sources = [source.strip(',\n')for source in sources_list.readlines()]
 
 
 class RedditClient:
@@ -56,7 +28,7 @@ class RedditClient:
         return stats
 
     def _get_submission(self):
-        subbreddit = random.choice(SOURCES)
+        subbreddit = random.choice(sources)
         submissions = []
 
         for submission in self.reddit.subreddit(subbreddit).hot(limit=10):
