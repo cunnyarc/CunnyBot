@@ -42,9 +42,8 @@ class RedditClient:
         try:
             submission = self._get_submission()
             stats = self._get_post_stats(submission)
+            print(f"{Fore.GREEN}{Style.BRIGHT}\u2714 Successfully retrieved post! {Style.RESET_ALL}")
+            return stats
         except RedditAPIException:
             print(f"{Fore.RED}{Style.BRIGHT}\u274c A praw error occurred!{Style.RESET_ALL}")
-            return
-
-        print(f"{Fore.GREEN}{Style.BRIGHT}\u2714 Successfully retrieved post! {Style.RESET_ALL}")
-        return stats
+            pass

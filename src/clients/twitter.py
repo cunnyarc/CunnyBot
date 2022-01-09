@@ -18,5 +18,5 @@ class TwitterClient:
             )
             print(f"{Fore.GREEN}{Style.BRIGHT}\u2714 Successfully posted to Twitter! {Style.RESET_ALL}")
         except TweepyException:
-            print(f"{Fore.RED}{Style.BRIGHT}\u274c A tweepy error occurred!{Style.RESET_ALL}")
-            return
+            print(f"{Fore.RED}{Style.BRIGHT}\u274c A twitter error occurred!{Style.RESET_ALL}")
+            pass
