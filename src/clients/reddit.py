@@ -5,9 +5,6 @@ import praw
 from praw.exceptions import RedditAPIException
 from colorama import Fore, Style
 
-with open(os.path.join("./sources.txt"), 'r') as sources_list:
-    sources = [source.strip(',\n')for source in sources_list.readlines()]
-
 
 class RedditClient:
     def __init__(self, client_id, client_secret):
@@ -27,14 +24,17 @@ class RedditClient:
 
         return stats
 
+    def _get_sources(self):
+        with open(os.path.join("./sources.txt"), 'r') as sources_list:
+            sources = [source.strip(',\n') for source in sources_list.readlines()]
+
+        return sources
+
     def _get_submission(self):
+        sources = self._get_sources()
         subbreddit = random.choice(sources)
-        submissions = []
 
-        for submission in self.reddit.subreddit(subbreddit).hot(limit=10):
-            submissions.append(submission)
-
-        submission = random.choice(submissions)
+        submission = random.choice([submission for submission in self.reddit.subreddit(subbreddit).hot(limit=25)])
 
         return submission
 
