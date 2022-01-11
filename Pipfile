@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tweepy = "*"
 py-cord = "*"
-praw = "*"
-schedule = "*"
-colorama = "*"
+asyncpraw = "*"
+tweepy = "*"
+aiofiles = "<=0.8.0"
+APScheduler = "*"
 
 [dev-packages]
 
