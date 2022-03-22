@@ -9,6 +9,7 @@ asyncpraw = "*"
 tweepy = "*"
 aiofiles = "<=0.8.0"
 APScheduler = "*"
+colorama = "*"
 
 [dev-packages]
 
