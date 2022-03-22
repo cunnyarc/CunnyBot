@@ -99,7 +99,7 @@ if __name__ == "__main__":
     # Setup scheduler for periodic jobs
     scheduler = AsyncIOScheduler()
     scheduler.configure(timezone='America/New_York')
-    scheduler.add_job(main, trigger='cron', minute='*')
+    scheduler.add_job(main, trigger='cron', hour='*')
     scheduler.start()
 
     try:
