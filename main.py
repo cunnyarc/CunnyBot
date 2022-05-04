@@ -15,22 +15,19 @@
 import asyncio
 import random
 import tempfile
-
 import aiohttp
 import tweepy
 
 from secrets import *
 from config import DEBUG, SUBREDDITS
 from utils import logutils
+from discord_webhook import DiscordEmbed, AsyncDiscordWebhook
 from asyncpraw import Reddit
-from aiofiles import open
 from asyncpraw.models import Submission
-from discord.errors import DiscordException
-from discord import Embed, Webhook, AsyncWebhookAdapter
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-logger = logutils.init_logger("main.py")
-logger.debug(f"Debug mod is {DEBUG}; This is not a warning just a reminder.")
+logger = logutils.init_logger("moebot")
+logger.info(f"Debug mod is {DEBUG}; This is not a warning just a reminder.")
 auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
 auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
 twitter = tweepy.API(auth)
@@ -39,14 +36,19 @@ twitter = tweepy.API(auth)
 async def reddit_post():
     """Fetch reddit post to send out"""
     logger.info("Getting post from reddit")
+
     async with Reddit(
             client_id=REDDIT_CLIENT_ID,
             client_secret=REDDIT_CLIENT_SECRET,
-            user_agent="post grabber") as reddit:
-        subreddit = await reddit.subreddit(random.choice(SUBREDDITS))
-        posts = [submission async for submission in subreddit.hot(limit=30)]
-        post = random.choice(posts)
-        return post if post.url else reddit_post()
+            user_agent="post grabber"
+    ) as reddit:
+        while True:
+            subreddit = await reddit.subreddit(random.choice(SUBREDDITS))
+            posts = [submission async for submission in subreddit.hot(limit=30)]
+            post = random.choice(posts)
+
+            if post.url and not post.url.startswith("https://v.redd.it/"):
+                return post
 
 
 async def tweet(post: Submission):
@@ -54,6 +56,7 @@ async def tweet(post: Submission):
     async with aiohttp.ClientSession() as session:
         async with session.get(post.url) as resp:
             logger.info("Getting image for Twitter")
+
             with tempfile.NamedTemporaryFile('wb') as image:
                 image.write(await resp.read())
 
@@ -63,19 +66,17 @@ async def tweet(post: Submission):
                     twitter.update_status_with_media(filename=image.name, status=post.title)
                     logger.info("Posted to twitter")
                 except Exception:
-                    logger.warning("Failed to post to Twitter, probably image issue")
+                    logger.warning("Failed to post to Twitter, probably image issue", exc_info=DEBUG)
 
 
 async def discord_webhook(post: Submission):
     """Sends the reddit post to discord"""
-    embed = Embed(color=0xbc25cf, title=post.title, url=post.shortlink).set_image(url=post.url)
-    async with aiohttp.ClientSession() as session:
-        webhook = Webhook.from_url(DISCORD_WEBHOOK_URL, adapter=AsyncWebhookAdapter(session))
-        logger.info("Sending to Discord")
-        try:
-            await webhook.send(embed=embed)
-        except Exception:
-            logger.error("Failed to send to discord")
+    logger.info("Sending Image to Discord")
+    webhook = AsyncDiscordWebhook(url=DISCORD_WEBHOOK_URL, rate_limit_retry=True)
+    emb = DiscordEmbed(color=0xbc25cf, title=post.title, url=post.shortlink)
+    emb.set_image(url=post.url)
+    webhook.add_embed(emb)
+    await webhook.execute()
 
 
 async def main():
