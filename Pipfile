@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 asyncpraw = "*"
 tweepy = "*"
-aiofiles = "<=0.8.0"
 APScheduler = "*"
 colorama = "*"
 discord-webhook = {extras = ["async"], git = "https://github.com/lovvskillz/python-discord-webhook"}
