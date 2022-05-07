@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-py-cord = "*"
 asyncpraw = "*"
 tweepy = "*"
 aiofiles = "<=0.8.0"
