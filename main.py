@@ -6,105 +6,133 @@
  ╠══════════════════════════╩═════════════════════════════════════════════════════════════════════════════════════════╣
  ║                                                                                                                    ║
  ║ This bot is quite simple and just grabs a random image from a list of subreddits and then posts them to both       ║
- ║   Discord and Twitter                                                                                              ║
+ ║  Discord and Twitter                                                                                               ║
  ║                                                                                                                    ║
  ║                                                                                                                    ║
  ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 """
-
-import asyncio
-import random
-import tempfile
-import aiohttp
+import uuid
 import tweepy
+import random
+import aiohttp
+import asyncio
+import logging
+import mimetypes
+import asyncprawcore.exceptions
 
+from config import *
 from secrets import *
-from config import DEBUG, SUBREDDITS
-from utils import logutils
-from discord_webhook import DiscordEmbed, AsyncDiscordWebhook
+from io import BytesIO
 from asyncpraw import Reddit
-from asyncpraw.models import Submission
+from rich.logging import RichHandler
+from asyncpraw.models import Submission, Subreddit
+from discord_webhook import DiscordEmbed, AsyncDiscordWebhook
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-logger = logutils.init_logger("moebot")
-logger.info(f"Debug mod is {DEBUG}; This is not a warning just a reminder.")
-auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
-auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
-twitter = tweepy.API(auth)
+log: logging.Logger = logging.getLogger()
+handler = RichHandler(rich_tracebacks=True, tracebacks_show_locals=True, log_time_format="%x %H:%M:%S.%f")
+log.addHandler(handler)
+log.setLevel(DEBUG if DEBUG else logging.INFO)
+log.debug(f"Debug mod is {DEBUG}; This is not a warning just a reminder.")
 
 
-async def reddit_post():
-    """Fetch reddit post to send out"""
-    logger.info("Getting post from reddit")
+async def get_reddit_post(subreddit: str) -> Submission:
+    """
+    Simple function to get a random post from a given subreddit
+
+    :param subreddit: Subreddit to get post from
+    :returns: A praw Submission
+    """
+    log.info(f"Getting submission from subreddit: {subreddit}")
 
     async with Reddit(
-            client_id=REDDIT_CLIENT_ID,
-            client_secret=REDDIT_CLIENT_SECRET,
-            user_agent="post grabber"
-    ) as reddit:
-        while True:
-            subreddit = await reddit.subreddit(random.choice(SUBREDDITS))
-            posts = [submission async for submission in subreddit.hot(limit=30)]
-            post = random.choice(posts)
+        client_id=REDDIT_ID,
+        client_secret=REDDIT_SECRET,
+        user_agent="Moebot by u/Glitchy_Red"
+    ) as r:
+        try:
+            sub: Subreddit = await r.subreddit(subreddit)
+            posts = [
+                submission
+                async for submission in sub.hot(limit=30)
+                if not submission.is_self and not submission.url.startswith("https://v.redd.it/")
+            ]
+        except asyncprawcore.exceptions.ResponseException as e:
+            log.warning(f"Reddit gave a {e.response.status}")
 
-            if post.url and not post.url.startswith("https://v.redd.it/"):
-                return post
-
-
-async def tweet(post: Submission):
-    """Tweets out the reddit post"""
-    async with aiohttp.ClientSession() as session:
-        async with session.get(post.url) as resp:
-            logger.info("Getting image for Twitter")
-
-            with tempfile.NamedTemporaryFile('wb') as image:
-                image.write(await resp.read())
-
-                logger.debug(image.name)
-                logger.info("Attempting to post to Twitter")
-                try:
-                    twitter.update_status_with_media(filename=image.name, status=post.title)
-                    logger.info("Posted to twitter")
-                except Exception:
-                    logger.warning("Failed to post to Twitter, probably image issue", exc_info=DEBUG)
+    post: Submission = random.choice(posts)
+    return post
 
 
-async def discord_webhook(post: Submission):
-    """Sends the reddit post to discord"""
-    logger.info("Sending Image to Discord")
+async def post_tweet(post: Submission) -> None:
+    """
+    Function to post submission to https://twitter.com/CuteMoeBot
+
+    :param post: Submission that will be tweeted
+    """
+    auth = tweepy.OAuth1UserHandler(
+        TWITTER_CONSUMER_KEY,
+        TWITTER_CONSUMER_SECRET,
+        TWITTER_ACCESS_TOKEN,
+        TWITTER_ACCESS_TOKEN_SECRET
+    )
+    twit = tweepy.API(auth)
+
+    log.info("Getting image from post for Twitter")
+    async with aiohttp.ClientSession() as ses:
+        req = await ses.get(post.url)
+        if req.status < 400:
+            image = BytesIO(await req.content.read())
+            image.seek(0)
+            file_extension = mimetypes.guess_extension(req.headers['content-type'])
+            image.name = f"{uuid.uuid4()}{file_extension}"
+            log.debug(f"Succesfully got image: {image.name}")
+
+    log.debug("Uploading Image to Twitter")
+    media = twit.media_upload(filename=image.name, file=image)
+
+    try:
+        twit.update_status(status=post.title, media_ids=[media.media_id])
+        log.info("Successfully Posted to Twitter")
+    except tweepy.errors.TweepyException as e:
+        log.exception(f"Failed to post to Twitter")
+
+
+async def post_to_discord(post: Submission) -> None:
+    """
+    Function to post submission to discord: https://discord.gg/ZxbYHEh
+
+    :param post: Submission that will be sent to webhook
+    """
+    log.debug("Creating Discord Webhook")
     webhook = AsyncDiscordWebhook(url=DISCORD_WEBHOOK_URL, rate_limit_retry=True)
-    emb = DiscordEmbed(color=0xbc25cf, title=post.title, url=post.shortlink)
+    emb = DiscordEmbed(color=0xbc25cf, title=post.title)
     emb.set_image(url=post.url)
     webhook.add_embed(emb)
-    await webhook.execute()
+    try:
+        await webhook.execute()
+        log.info("Posted to Discord")
+    except Exception:
+        log.exception(f"Something happened when trying to post to discord")
 
 
-async def main():
+async def run() -> None:
     """
     Main loop of the bot
-
-    Main
-    |-Get Reddit post
-        |- Post to Twitter
-        |- Post to Discord
-    Loop
     """
-    logger.info("Starting main loop", exc_info=DEBUG)
-    post = await reddit_post()
+    subreddit = random.choice(SUBREDDITS)
+    post = await get_reddit_post(subreddit)
     await asyncio.gather(
-        discord_webhook(post),
-        tweet(post)
+        post_tweet(post),
+        post_to_discord(post)
     )
 
 if __name__ == "__main__":
-    # Setup scheduler for periodic jobs
-    scheduler = AsyncIOScheduler()
-    scheduler.configure(timezone='America/New_York')
-    scheduler.add_job(main, trigger='cron', hour='*')
-    scheduler.start()
-
+    sched = AsyncIOScheduler()
+    sched.configure(timezone='America/New_York')
+    sched.add_job(run, trigger="cron", hour="*", name="MoeBot")
+    sched.start()
     try:
         asyncio.get_event_loop().run_forever()
-
     except (KeyboardInterrupt, SystemExit):
-        logger.info("Shutting down main loop...")
+        pass
