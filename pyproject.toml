@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "moebot"
+version = "1.0.0"
+description = ""
+authors = ["glitchy <thepatheticweebgamer@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+tweepy = "^4.10.0"
+APScheduler = "^3.9.1"
+rich = "^12.4.4"
+asyncpraw = "^7.5.0"
+discord-webhook = {extras = ["async"], version = "^0.16.3"}
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
