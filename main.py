@@ -66,7 +66,7 @@ async def get_reddit_post(subreddit: str) -> Submission:
 
 async def post_tweet(post: Submission) -> None:
     """
-    Function to post submission to https://twitter.com/CuteMoeBot
+    Function to post submission to Twitter: https://twitter.com/CuteMoeBot
 
     :param post: Submission that will be tweeted
     """
