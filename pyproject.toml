@@ -1,16 +1,16 @@
 [tool.poetry]
-name = "moebot"
+name = "Moebot"
 version = "1.0.0"
-description = ""
+description = "A Reddit to Discord/Twitter bot"
 authors = ["glitchy <thepatheticweebgamer@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 tweepy = "^4.10.0"
-APScheduler = "^3.9.1"
 rich = "^12.4.4"
 asyncpraw = "^7.5.0"
-discord-webhook = {extras = ["async"], version = "^0.16.3"}
+python-dotenv = "^0.20.0"
+discord-webhook = "^0.16.3"
 
 [tool.poetry.dev-dependencies]
 
