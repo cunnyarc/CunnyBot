@@ -22,7 +22,7 @@
 </p>
 
 ## **About**
-This bot that takes a random subreddit from <a href="./subreddits.txt">subreddits.txt</a> takes a random post and then posts the image to Discord and Twitter
+This bot that takes a random subreddit from <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/subreddits.txt">subreddits.txt</a> takes a random post and then posts the image to Discord and Twitter
 
 ## **Features**
 - ✅ Fully Async
@@ -34,7 +34,7 @@ Dependencies:
 - Python < 3.10
 - [Yarn](https://yarnpkg.com/)
 
-Fill out your own `.env` file using <a href="./example.env">example.env</a> as a reference
+Fill out your own `.env` file using <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/example.ev">example.env</a> as a reference
 
 Then simply run
 ```bash
