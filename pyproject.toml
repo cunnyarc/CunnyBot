@@ -7,7 +7,6 @@ authors = ["glitchy <thepatheticweebgamer@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 tweepy = "^4.10.0"
-rich = "^12.4.4"
 asyncpraw = "^7.5.0"
 python-dotenv = "^0.20.0"
 discord-webhook = "^0.16.3"
