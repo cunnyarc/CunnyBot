@@ -1,6 +1,8 @@
-<img src="./assets/Logo.png">
-<h4 style="text-align: center">A Reddit to Discord/Twitter bot</h4>
-<div style="text-align: center">
+<h1 align="center">
+    <img src="./assets/Logo.png">
+</h1>
+<h4 align="center">A Reddit to Discord/Twitter bot</h4>
+<h1 align="center">
     <a href="https://liberapay.com/GlitchyChan/donate">
         <img src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black" alt="liberapay" />
     </a>
@@ -10,14 +12,14 @@
     <a href="https://twitter.com/cutemoebot">
         <img src="https://img.shields.io/badge/twitter-%2300acee?&style=for-the-badge&logo=twitter&logoColor=white" alt="twitter" />
     </a>
-</div>
+</h1>
 
-<div style="text-align: center">
+<p align="center">
     <a href="#about">About</a> •
     <a href="#features">Features</a> •
     <a href="#development">Development</a> •
     <a href="#deploy">Deploy</a>
-</div>
+</p>
 
 ## **About**
 This bot that takes a random subreddit from <a href="./subreddits.txt">subreddits.txt</a> takes a random post and then posts the image to Discord and Twitter
