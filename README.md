@@ -50,5 +50,5 @@ crontab -e
 ```
 then type in 
 ```bash
-0 * * * * PATH/TO/POETRY/ENV/bin/python > /PATH/TO/app.py
+0 * * * * PATH/TO/POETRY/ENV/bin/python  /PATH/TO/app.py
 ```
