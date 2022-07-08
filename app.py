@@ -108,7 +108,7 @@ async def discord(post: Submission, image: BytesIO) -> None:
     """
     location = image.tell()
     image.seek(location)
-    hook = DiscordWebhook(getenv('WEBHOOK'), rate_limit_retry=True, content=f"[{post.title}](<{post.permalink}>)")
+    hook = DiscordWebhook(getenv('WEBHOOK'), rate_limit_retry=True, content=post.title)
     hook.add_file(image.getvalue(), image.name)
     try:
         hook.execute()
