@@ -2,7 +2,6 @@ import uuid
 import random
 import asyncio
 import logging
-import mimetypes
 import asyncprawcore
 import requests
 import tweepy.errors
@@ -10,6 +9,7 @@ import tweepy.errors
 
 from os import getenv
 from io import BytesIO
+from pathlib import Path
 from asyncpraw import Reddit
 from logging import Formatter
 from dotenv import load_dotenv
@@ -22,7 +22,7 @@ from logging.handlers import TimedRotatingFileHandler
 
 load_dotenv()
 log = logging.getLogger('moebot')
-handler = TimedRotatingFileHandler(filename='./logs/runtime.log', when='D', interval=1, backupCount=10, encoding='utf-8', delay=False)
+handler = TimedRotatingFileHandler(filename=f'{Path(__file__).parent.absolute()}/logs/runtime.log', when='D', interval=1, backupCount=10, encoding='utf-8', delay=False)
 formatter = Formatter(fmt="[%(asctime)s] - [%(levelname)-7s : %(lineno)d]: %(message)s")
 handler.setFormatter(formatter)
 log.addHandler(handler)
