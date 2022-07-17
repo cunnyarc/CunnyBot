@@ -70,8 +70,7 @@ async def get_image(post: Submission) -> BytesIO:
         req = await ses.get(post.url)
         if req.status < 400:
             image = BytesIO(await req.content.read())
-            file_extension = mimetypes.guess_extension(req.headers['content-type'])
-            image.name = f"{uuid.uuid4()}{file_extension}"
+            image.name = f"{uuid.uuid4()}.png"
             log.debug(f"Succesfully got image: {image.name}")
     return image
 
