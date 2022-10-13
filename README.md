@@ -1,8 +1,8 @@
-<center>
+<p align="center">
     <img src="./assets/Logo.png">
-</center>
-<center>A Curated Gelbooru to Twitter / Discord Bot</center>
-<center>
+</p>
+<h3 align="center">A Curated Gelbooru to Twitter / Discord Bot</h3>
+<p align="center">
     <a href="https://liberapay.com/GlitchyChan/donate">
         <img src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black" alt="liberapay" />
     </a>
@@ -12,7 +12,7 @@
     <a href="https://twitter.com/cutemoebot">
         <img src="https://img.shields.io/badge/twitter-%2300acee?&style=for-the-badge&logo=twitter&logoColor=white" alt="twitter" />
     </a>
-</center>
+</p>
 
 <p align="center">
     <a href="#about">About</a> •
