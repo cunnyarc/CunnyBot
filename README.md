@@ -36,7 +36,9 @@ Dependencies:
 - Python < 3.10
 - [Poetry](https://python-poetry.org/)
 
-Fill out your own `.env` file using <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/example.ev">example.env</a> as a reference
+---
+
+Fill out your own `.env` file using <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/example.env">example.env</a> as a reference
 
 Then simply run
 ```bash
