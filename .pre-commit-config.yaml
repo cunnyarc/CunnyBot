@@ -1,7 +1,7 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 
-exclude: (\.json|\.log)
+exclude: (\.json|\.log|\.idea\/)
 repos:
   - repo: https://github.com/PyCQA/autoflake
     rev: v1.4
