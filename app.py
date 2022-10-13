@@ -68,6 +68,7 @@ EXCLUDE_TAGS = [
     "user:kamatamaudon",
     "translation_request",
     "third-party_edit",
+    "ai-generated",
 ]
 
 
