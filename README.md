@@ -1,8 +1,8 @@
-<h1 align="center">
+<center>
     <img src="./assets/Logo.png">
-</h1>
-<h4 align="center">A Reddit to Discord/Twitter bot</h4>
-<h1 align="center">
+</center>
+<center>A Curated Gelbooru to Twitter / Discord Bot</center>
+<center>
     <a href="https://liberapay.com/GlitchyChan/donate">
         <img src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black" alt="liberapay" />
     </a>
@@ -12,7 +12,7 @@
     <a href="https://twitter.com/cutemoebot">
         <img src="https://img.shields.io/badge/twitter-%2300acee?&style=for-the-badge&logo=twitter&logoColor=white" alt="twitter" />
     </a>
-</h1>
+</center>
 
 <p align="center">
     <a href="#about">About</a> •
@@ -22,17 +22,19 @@
 </p>
 
 ## **About**
-This bot that takes a random subreddit from <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/subreddits.txt">subreddits.txt</a> takes a random post and then posts the image to Discord and Twitter
+This script takes a random image from <a href="https://gelbooru.com">Gelbooru</a> using curated tags and posts it to Discord / Twitter
 
 ## **Features**
-- ✅ Fully Async
-- ✅ Proper Logging for any errors
-- ✅ Easily Extendable with more Subreddits
+- 💀 Overkill
+- 🔁 Asyncio
+- 🔥 Blazingly Fast™️
+- 📝 Pretty logging with <a href="https://github.com/Delgan/loguru">Loguru</a>
+- ⚙️ Easily editable with simple variable changes
 
 ## **Development**
 Dependencies:
 - Python < 3.10
-- [Yarn](https://yarnpkg.com/)
+- [Poetry](https://python-poetry.org/)
 
 Fill out your own `.env` file using <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/example.ev">example.env</a> as a reference
 
@@ -41,6 +43,8 @@ Then simply run
 poetry install
 ```
 
+To install all needed dependencies
+
 
 ## **Deploy**
 Install dependencies in <a href="#development">development</a> then on linux to run every hour and follow the instructions
@@ -48,7 +52,7 @@ Install dependencies in <a href="#development">development</a> then on linux to 
 ```bash
 crontab -e
 ```
-then type in 
+then type in
 ```bash
 0 * * * * PATH/TO/POETRY/ENV/bin/python  /PATH/TO/app.py
 ```
