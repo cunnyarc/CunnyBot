@@ -32,29 +32,26 @@ This script takes a random image from <a href="https://gelbooru.com">Gelbooru</a
 - ⚙️ Easily editable with simple variable changes
 
 ## **Development**
-Dependencies:
-- Python < 3.10
+Install Dependencies:
+- Python ^3.10
 - [Poetry](https://python-poetry.org/)
 
----
-
-Fill out your own `.env` file using <a href="https://codeberg.org/Waifu-Tech/Moe-Bot/src/branch/master/example.env">example.env</a> as a reference
-
-Then simply run
+Setup environment:
+- Fill out your own `.env` file using [example.ev](example.env) as a reference
+- Then simply run
 ```bash
 poetry install
 ```
 
-To install all needed dependencies
-
 
 ## **Deploy**
-Install dependencies in <a href="#development">development</a> then on linux to run every hour and follow the instructions
+- Follow instructions in <a href="#development">development</a>
+- On linux do the following
 
 ```bash
 crontab -e
 ```
-then type in
+- then paste the following replacing the placeholders
 ```bash
 0 * * * * PATH/TO/POETRY/ENV/bin/python  /PATH/TO/app.py
 ```
