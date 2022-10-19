@@ -46,6 +46,7 @@ poetry install
 
 ## **Deploy**
 - Follow instructions in <a href="#development">development</a>
+- Edit [config.py](config.py) with the tags you want to allow or disallow
 - On linux do the following
 
 ```bash

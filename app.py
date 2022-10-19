@@ -13,6 +13,8 @@ from pygelbooru import Gelbooru
 from pygelbooru.gelbooru import GelbooruImage
 from tweepy import API, OAuth1UserHandler
 
+from config import ALLOWED_TAGS, EXCLUDE_TAGS
+
 # Load environment variables
 load_dotenv()
 
@@ -36,40 +38,6 @@ auth = OAuth1UserHandler(
     getenv("TWITTER_ACCESS_TOKEN_SECRET"),
 )
 twit = API(auth)
-
-# Configure what tags you want
-TAGS = []
-
-# Configure what tags to exclude
-EXCLUDE_TAGS = [
-    "1boy",
-    "multiple_boys",
-    "furry",
-    "irl",
-    "cosplay",
-    "comic",
-    "meme",
-    "no_humans",
-    "digimon",
-    "bishoujo_senshi_sailor_moon",
-    "adventure_time",
-    "horror",
-    "original",
-    "non-web_source",
-    "kirby_(series)",
-    "pokemon",
-    "rating:explicit",
-    "my_little_pony",
-    "rating:questionable",
-    "feet",
-    "senran_kagura",
-    "monochrome",
-    "very_dark_skin",
-    "user:kamatamaudon",
-    "translation_request",
-    "third-party_edit",
-    "ai-generated",
-]
 
 
 @log.catch()
@@ -103,7 +71,7 @@ async def post_twitter(image: "BytesIO") -> None:
 async def main() -> None:
     """Function to start script"""
     log.info("Starting script...")
-    post: GelbooruImage = await gel.random_post(tags=TAGS, exclude_tags=EXCLUDE_TAGS)
+    post: GelbooruImage = await gel.random_post(tags=ALLOWED_TAGS, exclude_tags=EXCLUDE_TAGS)
     log.info("Found Gelbooru image to post")
     log.debug(f"Fetched gelbooru image: {post.file_url}")
     image = await download_image(post)
