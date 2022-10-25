@@ -1,7 +1,8 @@
 <p align="center">
-    <img src="./assets/Logo.png">
+    <img src="./assets/cunnybot.png">
 </p>
 <h3 align="center">A Curated Gelbooru to Twitter / Discord Bot</h3>
+<p align="center">Art by: <a href="https://twitter.com/arutana/">Arutana</a></p>
 <p align="center">
     <a href="https://liberapay.com/GlitchyChan/donate">
         <img src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black" alt="liberapay" />
