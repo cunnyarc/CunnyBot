@@ -60,6 +60,7 @@ async def post_discord(image: "GelbooruImage") -> None:
     log.success("Successfully posted to Discord")
 
 
+@log.catch()
 async def post_twitter(image: "BytesIO") -> None:
     log.info("Posting to Twitter")
     media = twit.media_upload(image.name, file=image)
